@@ -1,5 +1,5 @@
 {
-  "name": "oauth-server",
+  "name": "auth-oauth-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
