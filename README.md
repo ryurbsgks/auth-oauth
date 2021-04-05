@@ -1,1 +1,1 @@
-# im-sprint-auth-oauth
+# auth-oauth
