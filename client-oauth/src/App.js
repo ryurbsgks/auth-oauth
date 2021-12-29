@@ -7,8 +7,9 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      isLogin: false
+      isLogin: false,
       // TODO:
+      accessToken: ""
     };
     this.getAccessToken = this.getAccessToken.bind(this);
   }
@@ -22,6 +23,13 @@ class App extends Component {
     // access token을 받아온 후
     //  - 로그인 상태를 true로 변경하고,
     //  - state에 access token을 저장하세요
+
+    let resp = await axios.post("http://localhost:8080/callback", { authorizationCode: authorizationCode })
+
+    this.setState({
+      isLogin: true,
+      accessToken: resp.data.accessToken
+    })
   }
 
   componentDidMount() {

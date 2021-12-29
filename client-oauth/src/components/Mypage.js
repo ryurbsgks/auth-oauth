@@ -17,11 +17,41 @@ class Mypage extends Component {
   async getGitHubUserInfo() {
     // TODO: GitHub API를 통해 사용자 정보를 받아오세요.
     // https://docs.github.com/en/free-pro-team@latest/rest/reference/users#get-the-authenticated-user
+
+    const { accessToken } = this.props;
+    let response = await axios.get("https://api.github.com/user", {
+      headers: {
+        authorization: `token ${accessToken}`
+      }
+    })
+
+    const { name, login, html_url, public_repos } = response.data;
+
+    this.setState({
+      name,
+      login,
+      html_url,
+      public_repos
+    })
   }
 
   async getImages() {
     // TODO : 마찬가지로 액세스 토큰을 이용해 local resource server에서 이미지들을 받아와 주세요.
     // resource 서버에 GET /images 로 요청하세요.
+
+    const { accessToken } = this.props;
+
+    let response = await axios.get("http://localhost:8080/images", {
+      headers: {
+        authorization: `token ${accessToken}`
+      }
+    })
+
+    const { images } = response.data;
+
+    this.setState({
+      images
+    })
   }
 
   componentDidMount() {
@@ -36,30 +66,34 @@ class Mypage extends Component {
       return <div>로그인이 필요합니다</div>
     }
 
+    const { name, login, html_url, public_repos, images } = this.state;
+
     return (
       <div>
         <div className='mypageContainer'>
           <h3>Mypage</h3>
           <hr />
 
-          <div>안녕하세요. <span className="name" id="name">{FILL_ME_IN}</span>님! GitHub 로그인이 완료되었습니다.</div>
+          <div>안녕하세요. <span className="name" id="name">{name}</span>님! GitHub 로그인이 완료되었습니다.</div>
           <div>
             <div className="item">
               나의 로그인 아이디:
-              <span id="login">{FILL_ME_IN}</span>
+              <span id="login">{login}</span>
             </div>
             <div className="item">
               나의 GitHub 주소:
-              <span id="html_url">{FILL_ME_IN}</span>
+              <span id="html_url">{html_url}</span>
             </div>
             <div className="item">
               나의 public 레포지토리 개수:
-              <span id="public_repos">{FILL_ME_IN}</span>개
+              <span id="public_repos">{public_repos}</span>개
             </div>
           </div>
 
           <div id="images">
-            {/* TODO: 여기에 img 태그를 이용해 resource server로 부터 받은 이미지를 출력하세요 */}
+            {/* TODO: 여기에 img 태그를 이용해 resource server로 부터 받은 이미지를 출력하세요 */
+              images.map( img => <img key={img.file} src={img.blob} />)
+            }
           </div>
         </div>
       </div >
